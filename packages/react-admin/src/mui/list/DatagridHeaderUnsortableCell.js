@@ -1,11 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
-import shouldUpdate from 'recompose/shouldUpdate';
 import compose from 'recompose/compose';
-import Button from 'material-ui/Button';
 import { withStyles } from 'material-ui/styles';
-import ContentSort from 'material-ui-icons/Sort';
 
 import DatagridHeaderCell from './DatagridHeaderCell';
 

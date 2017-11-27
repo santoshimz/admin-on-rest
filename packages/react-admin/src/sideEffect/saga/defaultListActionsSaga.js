@@ -35,6 +35,8 @@ const defaultListActionsSaga = () => {
             meta,
         } = action;
 
+        // TODO: showNotification should allow arguments to display notifications. The result should be passed to this message
+        //eslint-disable-next-line no-unused-vars
         let result = yield all(
             ids.map(id => call(deleteItem, meta.resource, id, skipNotification))
         );
