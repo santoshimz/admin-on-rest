@@ -62,11 +62,9 @@ export default resource => (
                 ...previousState.slice(index + 1),
             ];
 
-            Object.defineProperty(
-                newState,
-                'fetchedAt',
-                previousState.fetchedAt
-            );
+            Object.defineProperty(newState, 'fetchedAt', {
+                value: previousState.fetchedAt,
+            });
 
             return newState;
         }
