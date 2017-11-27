@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import defaultsDeep from 'lodash.defaultsdeep';
 import { TableCell } from 'material-ui/Table';
 
 const DatagridCell = ({ className, children, style, ...rest }) => {

@@ -20,7 +20,12 @@ describe('<DatagridHeaderFieldCell />', () => {
                     updateSort={() => true}
                 />
             );
-            assert.equal(wrapper.find('withStyles(Button)').length, 1);
+            assert.equal(
+                wrapper.find(
+                    'shouldUpdate(withStyles(DatagridHeaderSortableCell))'
+                ).length,
+                1
+            );
         });
 
         it('should be disabled when field has no source', () => {
@@ -31,8 +36,10 @@ describe('<DatagridHeaderFieldCell />', () => {
                     updateSort={() => true}
                 />
             );
-
-            assert.equal(wrapper.find('withStyles(Button)').length, 0);
+            assert.equal(
+                wrapper.find('withStyles(DatagridHeaderUnsortableCell)').length,
+                1
+            );
         });
 
         it('should be disabled when sortable prop is explicitly set to false', () => {
@@ -44,7 +51,10 @@ describe('<DatagridHeaderFieldCell />', () => {
                 />
             );
 
-            assert.equal(wrapper.find('withStyles(Button)').length, 0);
+            assert.equal(
+                wrapper.find('withStyles(DatagridHeaderUnsortableCell)').length,
+                1
+            );
         });
     });
 });

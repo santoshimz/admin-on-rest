@@ -9,9 +9,9 @@ describe('<DatagridFieldCell />', () => {
     Field.defaultProps = {
         type: 'foo',
     };
-    it('should render as a mui <TableRowColumn /> component', () => {
+    it('should render as a roa <DatagridCell /> component', () => {
         const wrapper = shallow(<DatagridFieldCell field={<Field />} />);
-        const col = wrapper.find('withStyles(TableCell)');
+        const col = wrapper.find('DatagridCell');
         assert.equal(col.length, 1);
     });
     it('should use regular col style by default', () => {
@@ -21,14 +21,14 @@ describe('<DatagridFieldCell />', () => {
                 defaultStyle={{ color: 'blue' }}
             />
         );
-        const col = wrapper.find('withStyles(TableCell)');
+        const col = wrapper.find('DatagridCell');
         assert.deepEqual(col.at(0).prop('style'), { color: 'blue' });
     });
     it('should use field style to override default style', () => {
         const wrapper = shallow(
             <DatagridFieldCell field={<Field style={{ color: 'red' }} />} />
         );
-        const col = wrapper.find('withStyles(TableCell)');
+        const col = wrapper.find('DatagridCell');
         assert.deepEqual(col.at(0).prop('style'), { color: 'red' });
     });
 });
