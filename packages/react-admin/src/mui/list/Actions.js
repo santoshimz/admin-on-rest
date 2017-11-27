@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { CardActions } from 'material-ui/Card';
 import { CreateButton, RefreshButton } from '../button';
 import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
+import SelectActionButton from './SelectActionButton';
 
 const cardActionStyle = {
     zIndex: 2,
@@ -17,6 +18,9 @@ const Actions = ({
     displayedFilters,
     filterValues,
     hasCreate,
+    selectable,
+    selectActions,
+    selection,
     basePath,
     showFilter,
 }) => {
@@ -30,6 +34,13 @@ const Actions = ({
                     filterValues,
                     context: 'button',
                 })}
+            {selectable && (
+                <SelectActionButton
+                    resource={resource}
+                    selection={selection}
+                    selectActions={selectActions}
+                />
+            )}
             {hasCreate && <CreateButton basePath={basePath} />}
             <RefreshButton />
         </CardActions>
@@ -42,6 +53,9 @@ Actions.propTypes = {
     filters: PropTypes.element,
     filterValues: PropTypes.object,
     hasCreate: PropTypes.bool,
+    selectable: PropTypes.bool,
+    selectActions: PropTypes.array,
+    selection: PropTypes.array,
     resource: PropTypes.string,
     showFilter: PropTypes.func,
     theme: PropTypes.object,

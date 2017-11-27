@@ -104,6 +104,7 @@ export class List extends Component {
             nextProps.isLoading === this.props.isLoading &&
             nextProps.width === this.props.width &&
             nextProps.version === this.props.version &&
+            nextProps.selection === this.props.selection &&
             nextState === this.state
         ) {
             return false;
@@ -198,6 +199,10 @@ export class List extends Component {
             title,
             data,
             ids,
+            selection,
+            selectable,
+            selectMode,
+            selectActions,
             total,
             isLoading,
             translate,
@@ -217,7 +222,6 @@ export class List extends Component {
         const titleElement = (
             <Title title={title} defaultTitle={defaultTitle} />
         );
-
         return (
             <div className="list-page">
                 <Card style={{ opacity: isLoading ? 0.8 : 1 }}>
@@ -229,6 +233,9 @@ export class List extends Component {
                             filters,
                             filterValues,
                             basePath,
+                            selectable,
+                            selectActions,
+                            selection,
                             hasCreate,
                             displayedFilters: this.state,
                             showFilter: this.showFilter,
@@ -250,6 +257,9 @@ export class List extends Component {
                                 React.cloneElement(children, {
                                     resource,
                                     ids,
+                                    selection,
+                                    selectable,
+                                    selectMode,
                                     data,
                                     currentSort: {
                                         field: query.sort,
@@ -301,6 +311,16 @@ List.propTypes = {
     filterValues: PropTypes.object, // eslint-disable-line react/forbid-prop-types
     hasCreate: PropTypes.bool.isRequired,
     ids: PropTypes.array,
+    selectable: PropTypes.bool,
+    selectMode: PropTypes.oneOf(['single', 'page', 'bulk']),
+    selection: PropTypes.array,
+    selectActions: PropTypes.arrayOf(
+        PropTypes.shape({
+            action: PropTypes.string,
+            actionOptions: PropTypes.object,
+            label: PropTypes.string,
+        })
+    ),
     isLoading: PropTypes.bool.isRequired,
     location: PropTypes.object.isRequired,
     path: PropTypes.string,
@@ -342,6 +362,7 @@ function mapStateToProps(state, props) {
         ids: resourceState.list.ids,
         total: resourceState.list.total,
         data: resourceState.data,
+        selection: resourceState.list.selection.ids,
         isLoading: state.admin.loading > 0,
         filterValues: resourceState.list.params.filter,
         version: state.admin.ui.viewVersion,

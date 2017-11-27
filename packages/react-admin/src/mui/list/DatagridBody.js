@@ -2,7 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import shouldUpdate from 'recompose/shouldUpdate';
 import { TableBody, TableRow } from 'material-ui/Table';
-import DatagridCell from './DatagridCell';
+import DatagridFieldCell from './DatagridFieldCell';
+import DatagridSelectCell from './DatagridSelectCell';
 
 const DatagridBody = ({
     resource,
@@ -15,6 +16,9 @@ const DatagridBody = ({
     rowStyle,
     options,
     rowOptions,
+    selectable,
+    selection,
+    selectMode,
     ...rest
 }) => (
     <TableBody className="datagrid-body" {...rest} {...options}>
@@ -24,20 +28,32 @@ const DatagridBody = ({
                 key={id}
                 {...rowOptions}
             >
+                {selectable && (
+                    <DatagridSelectCell
+                        key={`${id}-select`}
+                        record={data[id]}
+                        selection={selection}
+                        selectMode={selectMode}
+                        resource={resource}
+                        defaultStyle={styles.cell['td:first-child']}
+                    />
+                )}
                 {React.Children.map(
                     children,
                     (field, index) =>
                         field ? (
-                            <DatagridCell
+                            <DatagridFieldCell
                                 key={`${id}-${field.props.source || index}`}
                                 className={`column-${field.props.source}`}
                                 record={data[id]}
                                 defaultStyle={
-                                    index === 0
+                                    index === 0 && !selectable
                                         ? styles.cell['td:first-child']
                                         : styles.cell.td
                                 }
-                                {...{ field, basePath, resource }}
+                                field={field}
+                                basePath={basePath}
+                                resource={resource}
                             />
                         ) : null
                 )}
@@ -56,11 +72,15 @@ DatagridBody.propTypes = {
     rowOptions: PropTypes.object,
     styles: PropTypes.object,
     rowStyle: PropTypes.func,
+    selectable: PropTypes.bool,
+    selection: PropTypes.array,
+    selectMode: PropTypes.oneOf(['single', 'page', 'bulk']),
 };
 
 DatagridBody.defaultProps = {
     data: {},
     ids: [],
+    selectMode: 'bulk',
 };
 
 const PureDatagridBody = shouldUpdate(

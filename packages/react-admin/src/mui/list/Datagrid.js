@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withTheme } from 'material-ui/styles';
 import Table, { TableHead, TableRow } from 'material-ui/Table';
-import DatagridHeaderCell from './DatagridHeaderCell';
 import DatagridBody from './DatagridBody';
+import DatagridHeaderSelectCell from './DatagridHeaderSelectCell';
+import DatagridHeaderFieldCell from './DatagridHeaderFieldCell';
 
 const defaultStyles = {
     table: {
@@ -18,6 +19,9 @@ const defaultStyles = {
         },
         'th:first-child': {
             padding: '0 0 0 12px',
+        },
+        select: {
+            padding: 0,
         },
     },
     cell: {
@@ -79,7 +83,10 @@ class Datagrid extends Component {
         const {
             resource,
             children,
+            selectable,
+            selectMode = 'bulk',
             ids,
+            selection,
             isLoading,
             data,
             currentSort,
@@ -99,15 +106,24 @@ class Datagrid extends Component {
             >
                 <TableHead {...headerOptions}>
                     <TableRow style={theme.tableRow}>
+                        {selectable && (
+                            <DatagridHeaderSelectCell
+                                ids={ids}
+                                selection={selection}
+                                selectMode={selectMode}
+                                defaultStyle={styles.header.select}
+                                resource={resource}
+                            />
+                        )}
                         {React.Children.map(
                             children,
                             (field, index) =>
                                 field ? (
-                                    <DatagridHeaderCell
+                                    <DatagridHeaderFieldCell
                                         key={field.props.source || index}
                                         field={field}
                                         defaultStyle={
-                                            index === 0
+                                            index === 0 && !selectable
                                                 ? styles.header[
                                                       'th:first-child'
                                                   ]
@@ -135,6 +151,9 @@ class Datagrid extends Component {
                     isLoading={isLoading}
                     options={bodyOptions}
                     rowOptions={rowOptions}
+                    selectable={selectable}
+                    selection={selection}
+                    selectMode={selectMode}
                 >
                     {children}
                 </DatagridBody>
@@ -142,7 +161,6 @@ class Datagrid extends Component {
         );
     }
 }
-
 Datagrid.propTypes = {
     basePath: PropTypes.string,
     bodyOptions: PropTypes.object,
@@ -150,9 +168,16 @@ Datagrid.propTypes = {
         sort: PropTypes.string,
         order: PropTypes.string,
     }),
+    selectable: PropTypes.bool,
+    selectMode: PropTypes.oneOf(['single', 'page', 'bulk']),
+    selectAction: PropTypes.shape({
+        type: PropTypes.oneOf(['delete', 'custom']),
+        label: PropTypes.string,
+    }),
     data: PropTypes.object.isRequired,
     headerOptions: PropTypes.object,
     ids: PropTypes.arrayOf(PropTypes.any).isRequired,
+    selection: PropTypes.arrayOf(PropTypes.any).isRequired,
     isLoading: PropTypes.bool,
     theme: PropTypes.object,
     options: PropTypes.object,
@@ -166,6 +191,7 @@ Datagrid.propTypes = {
 Datagrid.defaultProps = {
     data: {},
     ids: [],
+    selection: [],
 };
 
 export default withTheme()(Datagrid);

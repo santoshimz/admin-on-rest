@@ -17,6 +17,12 @@ import {
 import { showNotification } from '../../actions/notificationActions';
 import resolveRedirectTo from '../../util/resolveRedirectTo';
 
+function* handleNotification(requestPayload, ...notificationArgs) {
+    yield requestPayload.skipNotification
+        ? all([])
+        : put(showNotification(...notificationArgs));
+}
+
 /**
  * Side effects for fetch responses
  *
@@ -38,11 +44,17 @@ function* handleResponse({ type, requestPayload, error, payload }) {
                           )
                       ),
                   ])
-                : yield [put(showNotification('ra.notification.updated'))];
+                : yield handleNotification(
+                      requestPayload,
+                      'ra.notification.updated'
+                  );
         case CRUD_CREATE_SUCCESS:
             return requestPayload.redirectTo
                 ? yield all([
-                      put(showNotification('ra.notification.created')),
+                      handleNotification(
+                          requestPayload,
+                          'ra.notification.created'
+                      ),
                       put(
                           push(
                               resolveRedirectTo(
@@ -54,13 +66,19 @@ function* handleResponse({ type, requestPayload, error, payload }) {
                       ),
                   ])
                 : yield all([
-                      put(showNotification('ra.notification.created')),
+                      handleNotification(
+                          requestPayload,
+                          'ra.notification.created'
+                      ),
                       put(reset('record-form')),
                   ]);
         case CRUD_DELETE_SUCCESS:
             return requestPayload.redirectTo
                 ? yield all([
-                      put(showNotification('ra.notification.deleted')),
+                      handleNotification(
+                          requestPayload,
+                          'ra.notification.deleted'
+                      ),
                       put(
                           push(
                               resolveRedirectTo(
@@ -71,25 +89,29 @@ function* handleResponse({ type, requestPayload, error, payload }) {
                           )
                       ),
                   ])
-                : yield [put(showNotification('ra.notification.deleted'))];
+                : yield handleNotification(
+                      requestPayload,
+                      'ra.notification.deleted'
+                  );
         case CRUD_GET_ONE_SUCCESS:
             if (
                 !('id' in payload.data) ||
                 payload.data.id != requestPayload.id
             ) {
-                return yield put(
-                    showNotification('ra.notification.bad_item', 'warning')
+                return yield handleNotification(
+                    requestPayload,
+                    'ra.notification.bad_item',
+                    'warning'
                 );
             }
             break;
         case CRUD_GET_ONE_FAILURE:
             return requestPayload.basePath
                 ? yield all([
-                      put(
-                          showNotification(
-                              'ra.notification.item_doesnt_exist',
-                              'warning'
-                          )
+                      handleNotification(
+                          requestPayload,
+                          'ra.notification.item_doesnt_exist',
+                          'warning'
                       ),
                       put(push(requestPayload.basePath)),
                   ])
@@ -105,7 +127,11 @@ function* handleResponse({ type, requestPayload, error, payload }) {
                 typeof error === 'string'
                     ? error
                     : error.message || 'ra.notification.http_error';
-            return yield put(showNotification(errorMessage, 'warning'));
+            return yield handleNotification(
+                requestPayload,
+                errorMessage,
+                'warning'
+            );
         }
         default:
             return yield all([]);

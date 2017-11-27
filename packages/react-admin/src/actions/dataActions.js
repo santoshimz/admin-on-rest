@@ -75,10 +75,11 @@ export const crudDelete = (
     id,
     previousData,
     basePath,
-    redirectTo = 'list'
+    redirectTo = 'list',
+    skipNotification = false
 ) => ({
     type: CRUD_DELETE,
-    payload: { id, previousData, basePath, redirectTo },
+    payload: { id, previousData, basePath, redirectTo, skipNotification },
     meta: { resource, fetch: DELETE, cancelPrevious: false },
 });
 

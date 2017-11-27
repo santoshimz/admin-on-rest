@@ -2,6 +2,7 @@ module.exports = {
     ra: {
         action: {
             delete: 'Delete',
+            bulk_action: 'Action',
             show: 'Show',
             list: 'List',
             save: 'Save',

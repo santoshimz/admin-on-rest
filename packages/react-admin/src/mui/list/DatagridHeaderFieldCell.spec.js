@@ -2,9 +2,9 @@ import assert from 'assert';
 import React from 'react';
 import { shallow } from 'enzyme';
 
-import { DatagridHeaderCell } from './DatagridHeaderCell';
+import { DatagridHeaderFieldCell } from './DatagridHeaderFieldCell';
 
-describe('<DatagridHeaderCell />', () => {
+describe('<DatagridHeaderFieldCell />', () => {
     describe('sorting on a column', () => {
         const Field = () => <div />;
         Field.defaultProps = {
@@ -14,7 +14,7 @@ describe('<DatagridHeaderCell />', () => {
 
         it('should be enabled when field has a source', () => {
             const wrapper = shallow(
-                <DatagridHeaderCell
+                <DatagridHeaderFieldCell
                     currentSort={{}}
                     field={<Field source="title" />}
                     updateSort={() => true}
@@ -25,7 +25,7 @@ describe('<DatagridHeaderCell />', () => {
 
         it('should be disabled when field has no source', () => {
             const wrapper = shallow(
-                <DatagridHeaderCell
+                <DatagridHeaderFieldCell
                     currentSort={{}}
                     field={<Field />}
                     updateSort={() => true}
@@ -37,7 +37,7 @@ describe('<DatagridHeaderCell />', () => {
 
         it('should be disabled when sortable prop is explicitly set to false', () => {
             const wrapper = shallow(
-                <DatagridHeaderCell
+                <DatagridHeaderFieldCell
                     currentSort={{}}
                     field={<Field source="title" sortable={false} />}
                     updateSort={() => true}
