@@ -4,5 +4,3 @@ lib
 es6
 docs/_site/
 packages/ra-example/static
-# IDE 
-.idea

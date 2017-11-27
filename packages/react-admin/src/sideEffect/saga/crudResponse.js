@@ -18,9 +18,8 @@ import { showNotification } from '../../actions/notificationActions';
 import resolveRedirectTo from '../../util/resolveRedirectTo';
 
 function* handleNotification(requestPayload, ...notificationArgs) {
-    yield requestPayload.skipNotification
-        ? all([])
-        : put(showNotification(...notificationArgs));
+    if (!requestPayload.skipNotification)
+        yield put(showNotification(...notificationArgs));
 }
 
 /**
