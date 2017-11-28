@@ -84,12 +84,12 @@ export const PostList = ({ ...props }) => (
         sort={{ field: 'published_at', order: 'DESC' }}
         selectable
         selectMode="bulk"
-        selectActions={[
-            {
-                action: 'delete',
-                label: 'ra.action.delete',
-            },
-        ]}
+        //        selectActions={[
+        //            {
+        //                action: 'delete',
+        //                label: 'ra.action.delete',
+        //            },
+        //        ]}
     >
         <Responsive
             small={

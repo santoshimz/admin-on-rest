@@ -202,7 +202,6 @@ export class List extends Component {
             selection,
             selectable,
             selectMode,
-            selectActions,
             total,
             isLoading,
             translate,
@@ -234,8 +233,8 @@ export class List extends Component {
                             filterValues,
                             basePath,
                             selectable,
-                            selectActions,
                             selection,
+                            selectMode,
                             hasCreate,
                             displayedFilters: this.state,
                             showFilter: this.showFilter,
@@ -314,13 +313,6 @@ List.propTypes = {
     selectable: PropTypes.bool,
     selectMode: PropTypes.oneOf(['single', 'page', 'bulk']),
     selection: PropTypes.array,
-    selectActions: PropTypes.arrayOf(
-        PropTypes.shape({
-            action: PropTypes.string,
-            actionOptions: PropTypes.object,
-            label: PropTypes.string,
-        })
-    ),
     isLoading: PropTypes.bool.isRequired,
     location: PropTypes.object.isRequired,
     path: PropTypes.string,

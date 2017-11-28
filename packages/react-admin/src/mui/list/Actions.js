@@ -4,6 +4,7 @@ import { CardActions } from 'material-ui/Card';
 import { CreateButton, RefreshButton } from '../button';
 import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
 import SelectActionButton from './SelectActionButton';
+import SelectActionMenuItem from './SelectActionMenuItem';
 
 const cardActionStyle = {
     zIndex: 2,
@@ -12,6 +13,12 @@ const cardActionStyle = {
     flexWrap: 'wrap',
 };
 
+const DefaultSelectActionButton = props => (
+    <SelectActionButton {...props}>
+        <SelectActionMenuItem action="delete" label="ra.action.delete" />
+    </SelectActionButton>
+);
+
 const Actions = ({
     resource,
     filters,
@@ -19,8 +26,9 @@ const Actions = ({
     filterValues,
     hasCreate,
     selectable,
-    selectActions,
     selection,
+    selectMode,
+    selectActionButton = <DefaultSelectActionButton />,
     basePath,
     showFilter,
 }) => {
@@ -34,13 +42,12 @@ const Actions = ({
                     filterValues,
                     context: 'button',
                 })}
-            {selectable && (
-                <SelectActionButton
-                    resource={resource}
-                    selection={selection}
-                    selectActions={selectActions}
-                />
-            )}
+            {selectable &&
+                React.cloneElement(selectActionButton, {
+                    resource,
+                    selection,
+                    selectMode,
+                })}
             {hasCreate && <CreateButton basePath={basePath} />}
             <RefreshButton />
         </CardActions>
@@ -54,8 +61,9 @@ Actions.propTypes = {
     filterValues: PropTypes.object,
     hasCreate: PropTypes.bool,
     selectable: PropTypes.bool,
-    selectActions: PropTypes.array,
     selection: PropTypes.array,
+    selectMode: PropTypes.oneOf(['single', 'page', 'bulk']),
+    selectActionButton: PropTypes.node,
     resource: PropTypes.string,
     showFilter: PropTypes.func,
     theme: PropTypes.object,

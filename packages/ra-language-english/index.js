@@ -69,6 +69,8 @@ module.exports = {
             created: 'Element created',
             deleted: 'Element deleted',
             bad_item: 'Incorrect element',
+            deleted_multiple: '%{count} Elements successfully deleted',
+            deleted_multiple_errors: '%{count} Elements could not be deleted',
             item_doesnt_exist: 'Element does not exist',
             http_error: 'Server communication error',
         },

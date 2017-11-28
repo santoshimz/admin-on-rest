@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import Button from 'material-ui/Button';
 import Badge from 'material-ui/Badge';
 import Popover from 'material-ui/Popover';
-import { MenuList, MenuItem } from 'material-ui/Menu';
+import { MenuList } from 'material-ui/Menu';
 import LaunchIcon from 'material-ui-icons/Launch';
 import { withStyles } from 'material-ui/styles';
 import translate from '../../i18n/translate';
@@ -17,41 +17,6 @@ const styles = theme => ({
         margin: `0 ${theme.spacing.unit * 2}px`,
     },
 });
-
-const SelectActionMenu = ({
-    actions,
-    actionItemClickHandler,
-    translate,
-    ...rest
-}) => (
-    <Popover
-        anchorOrigin={{
-            vertical: 'bottom',
-            horizontal: 'left',
-        }}
-        transformOrigin={{
-            vertical: 'top',
-            horizontal: 'left',
-        }}
-        {...rest}
-    >
-        <MenuList>
-            {actions.map(({ action, label, ...actionOptions }) => (
-                <MenuItem
-                    key={action}
-                    onClick={actionItemClickHandler(action, actionOptions)}
-                >
-                    {label && translate(label)}
-                </MenuItem>
-            ))}
-        </MenuList>
-    </Popover>
-);
-SelectActionMenu.propTypes = {
-    actions: PropTypes.array,
-    actionItemClickHandler: PropTypes.func,
-    translate: PropTypes.func,
-};
 
 class SelectActionButton extends React.Component {
     state = {
@@ -67,7 +32,7 @@ class SelectActionButton extends React.Component {
         this.setState({ open: false });
     };
 
-    handleAction = (action, actionOptions) => () => {
+    handleAction = (action, actionOptions) => {
         this.props.executeListAction(
             this.props.resource,
             action,
@@ -82,8 +47,10 @@ class SelectActionButton extends React.Component {
             classes = {},
             label = 'ra.action.bulk_action',
             translate,
+            resource,
             selection,
             selectionMode,
+            children,
         } = this.props;
         return (
             <div>
@@ -112,14 +79,30 @@ class SelectActionButton extends React.Component {
                         {label && translate(label)}
                     </Button>
                 )}
-                <SelectActionMenu
-                    actions={this.props.selectActions}
-                    translate={translate}
+                <Popover
+                    anchorOrigin={{
+                        vertical: 'bottom',
+                        horizontal: 'left',
+                    }}
+                    transformOrigin={{
+                        vertical: 'top',
+                        horizontal: 'left',
+                    }}
                     open={this.state.open}
-                    actionItemClickHandler={this.handleAction}
                     anchorEl={this.state.anchorEl}
                     onRequestClose={this.handleRequestClose}
-                />
+                >
+                    <MenuList>
+                        {React.Children.map(children, child =>
+                            React.cloneElement(child, {
+                                translate,
+                                resource,
+                                selection,
+                                executeAction: this.handleAction,
+                            })
+                        )}
+                    </MenuList>
+                </Popover>
             </div>
         );
     }
@@ -133,13 +116,6 @@ SelectActionButton.propTypes = {
     label: PropTypes.string,
     translate: PropTypes.func.isRequired,
     selectionMode: PropTypes.oneOf(['single', 'page', 'bulk']),
-    selectActions: PropTypes.arrayOf(
-        PropTypes.shape({
-            action: PropTypes.string,
-            label: PropTypes.string,
-            actionOptions: PropTypes.object,
-        })
-    ),
 };
 
 const enhance = compose(

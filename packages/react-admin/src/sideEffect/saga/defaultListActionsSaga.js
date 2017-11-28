@@ -58,7 +58,17 @@ const defaultListActionsSaga = () => {
         if (reload) {
             yield put(refreshView());
         }
-        yield showNotification('ra.notification.deleted');
+        if (result.errorCount > 0) {
+            yield put(
+                // Todo: add messageParams (requires notification PR)
+                showNotification(
+                    'ra.notification.deleted_multiple_error',
+                    'error'
+                )
+            );
+        }
+        // Todo: add messageParams (requires notification PR)
+        yield put(showNotification('ra.notification.deleted_multiple'));
     }
 
     function* handleDeleteSuccessResponse({
