@@ -7,14 +7,21 @@ import Checkbox from 'material-ui/Checkbox';
 import { changeListSelection } from '../../actions/listActions';
 
 const SelectItem = ({ toggle, resource, selectMode, toggleIds, checked }) => {
-    const toggleHandler = (e, checked) =>
+    const toggleHandler = (e, checked) => {
         toggle(resource, {
             id: toggleIds,
             selectMode,
             selected: checked,
         });
+        return false;
+    };
     return (
-        <Checkbox color="primary" onChange={toggleHandler} checked={checked} />
+        <Checkbox
+            color="primary"
+            onClick={e => e.stopPropagation()}
+            onChange={toggleHandler}
+            checked={checked}
+        />
     );
 };
 

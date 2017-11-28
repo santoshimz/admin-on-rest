@@ -330,6 +330,7 @@ List.defaultProps = {
     filter: {},
     filterValues: {},
     perPage: 10,
+    selectMode: 'bulk',
     sort: {
         field: 'id',
         order: SORT_DESC,
