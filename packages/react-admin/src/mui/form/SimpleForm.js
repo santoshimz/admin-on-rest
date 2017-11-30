@@ -6,6 +6,7 @@ import compose from 'recompose/compose';
 import getDefaultValues from './getDefaultValues';
 import FormInput from './FormInput';
 import Toolbar from './Toolbar';
+import DirtyBlocker from './DirtyBlocker';
 
 const formStyle = { padding: '0 1em 1em 1em' };
 
@@ -22,10 +23,12 @@ export class SimpleForm extends Component {
             resource,
             submitOnEnter,
             toolbar,
+            dirty,
         } = this.props;
 
         return (
             <form className="simple-form">
+                <DirtyBlocker dirty={dirty} />
                 <div style={formStyle}>
                     {Children.map(children, input => (
                         <FormInput
@@ -53,6 +56,7 @@ SimpleForm.propTypes = {
     defaultValue: PropTypes.oneOfType([PropTypes.object, PropTypes.func]),
     handleSubmit: PropTypes.func, // passed by redux-form
     invalid: PropTypes.bool,
+    dirty: PropTypes.bool,
     record: PropTypes.object,
     resource: PropTypes.string,
     redirect: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),

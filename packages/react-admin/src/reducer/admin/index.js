@@ -6,11 +6,13 @@ import record from './record';
 import references from './references';
 import saving from './saving';
 import ui from './ui';
+import modals from './modals';
 
 export default combineReducers({
     resources,
     loading,
     notification,
+    modals,
     record,
     references,
     saving,
