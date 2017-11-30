@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux';
 import resources, { getResources as innerGetResources } from './resource';
 import loading from './loading';
-import notification from './notification';
+import notifications from './notifications';
 import record from './record';
 import references from './references';
 import saving from './saving';
@@ -11,8 +11,8 @@ import modals from './modals';
 export default combineReducers({
     resources,
     loading,
-    notification,
     modals,
+    notifications,
     record,
     references,
     saving,
