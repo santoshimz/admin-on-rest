@@ -8,6 +8,7 @@ import { ConnectedRouter, routerMiddleware } from 'react-router-redux';
 import createSagaMiddleware from 'redux-saga';
 import { all, fork } from 'redux-saga/effects';
 import withContext from 'recompose/withContext';
+import { modalsMiddleware } from 'redux-promising-modals';
 
 import { USER_LOGOUT } from './actions/authActions';
 
@@ -19,6 +20,8 @@ import Login from './mui/auth/Login';
 import Logout from './mui/auth/Logout';
 import TranslationProvider from './i18n/TranslationProvider';
 
+import { YesNoModal } from './mui/modals';
+
 const Admin = ({
     appLayout,
     authClient,
@@ -26,6 +29,7 @@ const Admin = ({
     customReducers = {},
     customSagas = [],
     customRoutes = [],
+    customModals = [],
     dashboard,
     history,
     locale,
@@ -57,7 +61,11 @@ const Admin = ({
         resettableAppReducer,
         initialState,
         compose(
-            applyMiddleware(sagaMiddleware, routerMiddleware(routerHistory)),
+            applyMiddleware(
+                modalsMiddleware,
+                sagaMiddleware,
+                routerMiddleware(routerHistory)
+            ),
             window.devToolsExtension ? window.devToolsExtension() : f => f
         )
     );
@@ -123,6 +131,8 @@ const Admin = ({
                                     })}
                             />
                         </Switch>
+                        <YesNoModal />
+                        {customModals.map(modal => React.cloneElement(modal))}
                     </div>
                 </ConnectedRouter>
             </TranslationProvider>

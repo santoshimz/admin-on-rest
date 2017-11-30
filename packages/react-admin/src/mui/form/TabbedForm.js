@@ -15,6 +15,7 @@ import { withStyles } from 'material-ui/styles';
 
 import Toolbar from './Toolbar';
 import getDefaultValues from './getDefaultValues';
+import DirtyBlocker from './DirtyBlocker';
 
 const styles = theme => ({
     form: { padding: '0 1em' },
@@ -42,6 +43,7 @@ export class TabbedForm extends Component {
             children,
             classes = {},
             invalid,
+            dirty,
             record,
             resource,
             submitOnEnter,
@@ -52,6 +54,7 @@ export class TabbedForm extends Component {
 
         return (
             <form className="tabbed-form">
+                <DirtyBlocker dirty={dirty} />
                 <Tabs value={this.state.value} onChange={this.handleChange}>
                     {Children.map(
                         children,
@@ -108,6 +111,7 @@ TabbedForm.propTypes = {
     classes: PropTypes.object,
     defaultValue: PropTypes.oneOfType([PropTypes.object, PropTypes.func]),
     handleSubmit: PropTypes.func, // passed by redux-form
+    dirty: PropTypes.bool,
     invalid: PropTypes.bool,
     record: PropTypes.object,
     redirect: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
