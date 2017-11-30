@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys';
 import { CreateButton, RefreshButton } from '../button';
+import SelectActionButton from '../list/SelectActionButton';
 
 class MobileActions extends React.Component {
     state = {
@@ -14,7 +15,7 @@ class MobileActions extends React.Component {
 
     render() {
         const {
-            //selection,
+            selection,
             filters,
             showFilter,
             resource,
@@ -22,8 +23,7 @@ class MobileActions extends React.Component {
             displayedFilters,
             filterValues,
             hasCreate,
-            //selectActions,
-            //selectable,
+            selectable,
         } = this.props;
 
         return (
@@ -37,6 +37,12 @@ class MobileActions extends React.Component {
                         context: 'button',
                     })}
                 <RefreshButton />
+                {selectable && (
+                    <SelectActionButton
+                        resource={resource}
+                        selection={selection}
+                    />
+                )}
                 {hasCreate && <CreateButton basePath={basePath} />}
             </div>
         );
@@ -50,10 +56,9 @@ MobileActions.propTypes = {
     filters: PropTypes.element,
     filterValues: PropTypes.object,
     hasCreate: PropTypes.bool,
-    //    selectable: PropTypes.bool,
-    //    selection: PropTypes.array,
-    //    selectMode: PropTypes.oneOf(['single', 'page', 'bulk']),
-    //    selectActions: PropTypes.element,
+    selectable: PropTypes.bool,
+    selection: PropTypes.array,
+    selectMode: PropTypes.oneOf(['single', 'page', 'bulk']),
     resource: PropTypes.string,
     showFilter: PropTypes.func,
     theme: PropTypes.object,
