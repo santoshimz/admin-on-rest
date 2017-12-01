@@ -1,7 +1,7 @@
 {
     "private": true,
     "version" : "1.0.0",
-    "name": "react-admin",
+    "name": "admin-on-rest",
     "scripts": {
         "test": "make test"
     },
